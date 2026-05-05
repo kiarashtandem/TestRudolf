@@ -5,8 +5,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 if [[ -r .env ]]; then
+  set -a
   # shellcheck source=/dev/null
   source .env
+  set +a
 fi
 
 RUDOLFS_URL="http://${RUDOLFS_HOST:-127.0.0.1}:${RUDOLFS_PORT:-8080}"
@@ -23,6 +25,7 @@ BRANCH="${1:-main}"
 git branch -M "$BRANCH" 2>/dev/null || true
 
 echo "Pushing to origin ($BRANCH) — LFS objects go to Rudolfs, Git data to bare remote ..."
-GIT_LFS_PROGRESS=1 git push -u origin "$BRANCH"
+# Do not set GIT_LFS_PROGRESS=1 — Git LFS expects an absolute file path, not a boolean.
+git push -u origin "$BRANCH"
 
 echo "Done. Check MinIO bucket for prefix lfs/demo/local-lfs-test/ (default Rudolfs layout)."
