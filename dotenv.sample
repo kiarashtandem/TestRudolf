@@ -1,0 +1,20 @@
+# MinIO (distinct ports so parallel stacks / other MinIO on :9000 is OK)
+export MINIO_BIN="${MINIO_BIN:-minio}"
+export MINIO_ROOT_USER="${MINIO_ROOT_USER:-minio}"
+export MINIO_ROOT_PASSWORD="${MINIO_ROOT_PASSWORD:-minio12345}"
+export MINIO_ROOT="${MINIO_ROOT:-$HOME/TestRudolf-minio-data}"
+export MINIO_API_HOST="${MINIO_API_HOST:-127.0.0.1}"
+export MINIO_API_PORT="${MINIO_API_PORT:-9010}"
+export MINIO_CONSOLE_PORT="${MINIO_CONSOLE_PORT:-9101}"
+
+# Rudolfs
+export RUDOLFS_HOST="${RUDOLFS_HOST:-127.0.0.1}"
+export RUDOLFS_PORT="${RUDOLFS_PORT:-8080}"
+export RUDOLFS_S3_BUCKET="${RUDOLFS_S3_BUCKET:-rudolfs-lfs}"
+export RUDOLFS_ADMIN_TOKEN="${RUDOLFS_ADMIN_TOKEN:-dev-admin-change-me}"
+
+# When Rudolfs runs, also set before `rudolfs s3`:
+# export AWS_S3_ENDPOINT="http://${MINIO_API_HOST}:${MINIO_API_PORT}"
+# export AWS_ACCESS_KEY_ID=$MINIO_ROOT_USER
+# export AWS_SECRET_ACCESS_KEY=$MINIO_ROOT_PASSWORD
+# export AWS_DEFAULT_REGION=us-east-1
