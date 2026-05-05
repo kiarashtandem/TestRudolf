@@ -8,8 +8,10 @@ if [[ ! -r .env ]] && [[ -r dotenv.sample ]]; then
   echo "hint: cp dotenv.sample .env and adjust MINIO_/RUDOLFS_ vars if needed" >&2
 fi
 if [[ -r .env ]]; then
+  set -a
   # shellcheck source=/dev/null
   source .env
+  set +a
 fi
 
 if [[ ! -f .lfsconfig ]]; then
@@ -52,8 +54,19 @@ fi
 if [[ ! -f blobs/sample-b.bin ]]; then
   dd if=/dev/urandom of=blobs/sample-b.bin bs=1024 count=256 status=none
 fi
+if [[ ! -f blobs/sample.txt ]]; then
+  cat > blobs/sample.txt <<'EOF'
+TestRudolf LFS text blob (UTF-8).
 
-git add .gitattributes .lfsconfig README.md dotenv.sample blobs/*.bin scripts/*.sh 2>/dev/null || true
+This file is tracked as Git LFS and is uploaded to Rudolfs on push, alongside the
+random *.bin fixtures from bootstrap.
+
+Line three: predictable content for debugging and MinIO object inspection.
+
+EOF
+fi
+
+git add .gitattributes .lfsconfig README.md dotenv.sample blobs/*.bin blobs/*.txt scripts/*.sh 2>/dev/null || true
 git add .gitattributes .lfsconfig README.md dotenv.sample blobs scripts || true
 
 if git diff --cached --quiet 2>/dev/null; then
